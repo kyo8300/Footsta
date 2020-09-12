@@ -1,0 +1,34 @@
+{
+  "name": "footsta",
+  "version": "1.0.0",
+  "description": "Football Forum",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tsc -W",
+    "build": "tsc",
+    "dev": "nodemon dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyo8300/Footsta.git"
+  },
+  "author": "Kyo8300",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kyo8300/Footsta/issues"
+  },
+  "homepage": "https://github.com/kyo8300/Footsta#readme",
+  "devDependencies": {
+    "@types/express": "types/express",
+    "@types/node": "^14.10.1",
+    "nodemon": "^2.0.4",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.17.0",
+    "express": "^4.17.1",
+    "graphql": "^15.3.0",
+    "type-graphql": "^1.0.0"
+  }
+}
