@@ -1,6 +1,6 @@
 import { Resolver, Mutation, InputType, Field, Arg } from 'type-graphql'
 import { getManager } from 'typeorm'
-import { validate } from 'class-validator'
+import { isEmail, validate } from 'class-validator'
 import bcrypt from 'bcrypt'
 import { User } from '../entity/User'
 
@@ -38,6 +38,28 @@ export class UserResolver {
     } else {
       console.log(user)
       await getManager().save(user)
+    }
+
+    return user
+  }
+
+  @Mutation(() => User)
+  async login(
+    @Arg('email') email: string,
+    @Arg('password') password: string
+  ): Promise<User> {
+    if (!isEmail(email)) {
+      throw new Error('Email is not validate')
+    }
+
+    const user = await User.findOne({ email })
+    if (!user) {
+      throw new Error('User does not exist!')
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password)
+    if (!isMatch) {
+      throw new Error('Password is incorrect')
     }
 
     return user

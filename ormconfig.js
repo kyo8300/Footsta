@@ -5,6 +5,6 @@ module.exports = {
   username: 'postgres',
   password: process.env.DB_PASSWORD,
   database: 'footsta',
-  synchronize: false,
+  synchronize: true,
   logging: true,
 }
