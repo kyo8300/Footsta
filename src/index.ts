@@ -1,10 +1,21 @@
 import 'reflect-metadata'
 import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
+import { createConnection, getConnectionOptions } from 'typeorm'
 import { buildSchema } from 'type-graphql'
 import { TestResolver } from './resolvers/test'
+import { User } from './entity/User'
+import path from 'path'
 
-const main = async () => {
+async function main() {
+  const connectionOptions = await getConnectionOptions()
+  Object.assign(connectionOptions, {
+    migrations: [path.join(__dirname, './migration/*')],
+    entities: [User],
+  })
+
+  await createConnection(connectionOptions).catch((err) => console.error(err))
+
   const app = express()
   const PORT = 4000
 
@@ -14,14 +25,15 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema,
-    playground: true,
   })
 
   apolloServer.applyMiddleware({ app })
 
   app.listen(PORT, () => {
-    console.log(`App running on port ${PORT}`)
+    console.log(`Server running on port ${PORT}`)
   })
 }
 
-main()
+main().catch((err) => {
+  console.error(err)
+})
