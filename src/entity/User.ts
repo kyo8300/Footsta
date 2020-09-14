@@ -7,9 +7,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 import { ObjectType, Field, ID } from 'type-graphql'
+import { Length, IsEmail } from 'class-validator'
 
-@Entity()
 @ObjectType()
+@Entity()
 export class User extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
@@ -17,7 +18,16 @@ export class User extends BaseEntity {
 
   @Field(() => String)
   @Column()
+  @Length(2, 20)
   username: string
+
+  @Field()
+  @Column({ unique: true })
+  @IsEmail()
+  email: string
+
+  @Column()
+  password: string
 
   @Field(() => String)
   @CreateDateColumn()

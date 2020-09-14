@@ -4,6 +4,7 @@ import { ApolloServer } from 'apollo-server-express'
 import { createConnection, getConnectionOptions } from 'typeorm'
 import { buildSchema } from 'type-graphql'
 import { TestResolver } from './resolvers/test'
+import { UserResolver } from './resolvers/user'
 import { User } from './entity/User'
 import path from 'path'
 
@@ -20,7 +21,7 @@ async function main() {
   const PORT = 4000
 
   const schema = await buildSchema({
-    resolvers: [TestResolver],
+    resolvers: [TestResolver, UserResolver],
   })
 
   const apolloServer = new ApolloServer({

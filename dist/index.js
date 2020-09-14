@@ -9,6 +9,7 @@ const apollo_server_express_1 = require("apollo-server-express");
 const typeorm_1 = require("typeorm");
 const type_graphql_1 = require("type-graphql");
 const test_1 = require("./resolvers/test");
+const user_1 = require("./resolvers/user");
 const User_1 = require("./entity/User");
 const path_1 = __importDefault(require("path"));
 async function main() {
@@ -21,7 +22,7 @@ async function main() {
     const app = express_1.default();
     const PORT = 4000;
     const schema = await type_graphql_1.buildSchema({
-        resolvers: [test_1.TestResolver],
+        resolvers: [test_1.TestResolver, user_1.UserResolver],
     });
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema,
