@@ -1,5 +1,4 @@
 import { Resolver, Mutation, InputType, Field, Arg, Ctx } from 'type-graphql'
-// import { Express } from 'express'
 import { getManager } from 'typeorm'
 import { isEmail, validate } from 'class-validator'
 import bcrypt from 'bcrypt'
