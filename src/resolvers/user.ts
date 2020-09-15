@@ -1,4 +1,5 @@
-import { Resolver, Mutation, InputType, Field, Arg } from 'type-graphql'
+import { Resolver, Mutation, InputType, Field, Arg, Ctx } from 'type-graphql'
+// import { Express } from 'express'
 import { getManager } from 'typeorm'
 import { isEmail, validate } from 'class-validator'
 import bcrypt from 'bcrypt'
@@ -19,7 +20,10 @@ class AddUserInput implements Partial<User> {
 @Resolver()
 export class UserResolver {
   @Mutation(() => User)
-  async register(@Arg('data') data: AddUserInput): Promise<User> {
+  async register(
+    @Arg('data') data: AddUserInput,
+    @Ctx() { session }: Express.Session
+  ): Promise<User> {
     const isExist = await User.findOne({ email: data.email })
     if (isExist) {
       throw new Error('User already exist!')
@@ -40,13 +44,16 @@ export class UserResolver {
       await getManager().save(user)
     }
 
+    session.userId = user.id
+
     return user
   }
 
   @Mutation(() => User)
   async login(
     @Arg('email') email: string,
-    @Arg('password') password: string
+    @Arg('password') password: string,
+    @Ctx() { session }: Express.Session
   ): Promise<User> {
     if (!isEmail(email)) {
       throw new Error('Email is not validate')
@@ -61,6 +68,8 @@ export class UserResolver {
     if (!isMatch) {
       throw new Error('Password is incorrect')
     }
+
+    session.userId = user.id
 
     return user
   }
