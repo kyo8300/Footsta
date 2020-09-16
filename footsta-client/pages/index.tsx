@@ -1,18 +1,13 @@
-import styled from 'styled-components'
-import Button from '@material-ui/core/Button'
+import React from 'react'
+import Box from '@material-ui/core/Box'
+import Navbar from '../components/layout/Navbar'
 
-const Title = styled.h1`
-  color: red;
-  font-size: 50px;
-`
-
-export default function Home() {
+export default function Index() {
   return (
     <>
-      <Title>My page</Title>
-      <Button variant="contained" color="primary">
-        Hello World
-      </Button>
+      <Navbar />
+      <>Main</>
+      <Box>Footer</Box>
     </>
   )
 }
