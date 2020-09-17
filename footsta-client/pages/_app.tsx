@@ -34,6 +34,34 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
 
         <meta property="og:site_name" content="Footsta" />
         <title>Footsta</title>
+
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/images/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/images/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/images/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/images/site.webmanifest" />
+        <link
+          rel="mask-icon"
+          href="/images/safari-pinned-tab.svg"
+          color="#53d9ec"
+        />
+        <meta name="apple-mobile-web-app-title" content="Footsta" />
+        <meta name="application-name" content="Footsta" />
+        <meta name="msapplication-TileColor" content="#53d9ec" />
+        <meta name="theme-color" content="#53d9ec" />
       </Head>
       <StylesProvider injectFirst>
         <MaterialUIThemeProvider theme={theme}>
