@@ -1,25 +1,14 @@
 import React from 'react'
+import styled from 'styled-components'
 import useScrollTrigger from '@material-ui/core/useScrollTrigger'
 import Zoom from '@material-ui/core/Zoom'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 
 interface Props {
   children: React.ReactElement
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      position: 'fixed',
-      bottom: theme.spacing(2),
-      right: theme.spacing(2),
-    },
-  })
-)
-
 function ScrollTop(props: Props) {
   const trigger = useScrollTrigger()
-  const classes = useStyles()
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     const anchor = (
@@ -33,11 +22,17 @@ function ScrollTop(props: Props) {
 
   return (
     <Zoom in={trigger}>
-      <div onClick={handleClick} role="presentation" className={classes.root}>
+      <BackIcon onClick={handleClick} role="presentation">
         {props.children}
-      </div>
+      </BackIcon>
     </Zoom>
   )
 }
+
+const BackIcon = styled.div`
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+`
 
 export default ScrollTop
