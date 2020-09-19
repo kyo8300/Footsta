@@ -8,6 +8,14 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Layout from '../components/layout/Layout'
 import theme from '../components/theme'
 
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
+
+const client = new ApolloClient({
+  uri: 'http://localhost:4000/graphql',
+  credentials: 'include',
+  cache: new InMemoryCache(),
+})
+
 const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side')
@@ -66,10 +74,12 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
       <StylesProvider injectFirst>
         <MaterialUIThemeProvider theme={theme}>
           <StyledComponentsThemeProvider theme={theme}>
-            <CssBaseline />
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <ApolloProvider client={client}>
+              <CssBaseline />
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </ApolloProvider>
           </StyledComponentsThemeProvider>
         </MaterialUIThemeProvider>
       </StylesProvider>

@@ -4,17 +4,25 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "graphql": "^15.3.0",
     "next": "latest",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
+    "react-hook-form": "^6.8.3",
     "styled-components": "^5.0.0"
   },
   "devDependencies": {
+    "@apollo/client": "^3.2.0",
+    "@graphql-codegen/cli": "1.17.8",
+    "@graphql-codegen/typescript": "1.17.8",
+    "@graphql-codegen/typescript-operations": "1.17.8",
+    "@graphql-codegen/typescript-react-apollo": "1.17.8",
     "@types/node": "12.0.12",
     "@types/react": "16.8.23",
     "@types/react-dom": "16.8.4",

@@ -1,6 +1,5 @@
 import React from 'react'
 import Box from '@material-ui/core/Box'
-import Navbar from '../components/layout/Navbar'
 import ScrollTop from '../components/layout/ScrollTop'
 import Fab from '@material-ui/core/Fab'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
@@ -10,7 +9,6 @@ import Toolbar from '@material-ui/core/Toolbar'
 export default function Index() {
   return (
     <>
-      <Navbar />
       <Toolbar id="back-to-top-anchor" />
       <Container>
         <Box>Main</Box>

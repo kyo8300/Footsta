@@ -44,8 +44,10 @@ const Navbar: React.FC = (props) => {
               </IconButton>
             </Link>
           </Box>
-          <AuthButton color="inherit">Login</AuthButton>
-          <AuthButton color="inherit">Register</AuthButton>
+          <AuthButton color="secondary">Login</AuthButton>
+          <Link href="register">
+            <AuthButton color="secondary">Register</AuthButton>
+          </Link>
         </ToolBar>
       </AppBar>
     </HideOnScroll>
