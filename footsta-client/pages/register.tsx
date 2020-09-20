@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { useRegisterMutation } from '../generated/graphql'
+import { useRegisterMutation, useCurrentUserQuery } from '../generated/graphql'
 import Container from '@material-ui/core/Container'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Typography from '@material-ui/core/Typography'
@@ -25,6 +25,10 @@ type RegisterInputs = {
 
 const Register: React.FC = () => {
   const router = useRouter()
+  const { data } = useCurrentUserQuery()
+  if (data?.currentUser) {
+    router.push('/')
+  }
   const { register: formRegister, handleSubmit, errors } = useForm<
     RegisterInputs
   >()

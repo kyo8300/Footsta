@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
+import { useCurrentUserQuery } from '../../generated/graphql'
 import useScrollTrigger from '@material-ui/core/useScrollTrigger'
 import AppBar from '@material-ui/core/AppBar'
 import Box from '@material-ui/core/Box'
@@ -27,6 +28,8 @@ function HideOnScroll(props: Props) {
 }
 
 const Navbar: React.FC = (props) => {
+  const { data, loading } = useCurrentUserQuery()
+
   return (
     <HideOnScroll {...props}>
       <AppBar position="sticky">
@@ -44,17 +47,29 @@ const Navbar: React.FC = (props) => {
               </IconButton>
             </Link>
           </Box>
-          <Link href="login">
-            <AuthButton color="secondary">Login</AuthButton>
-          </Link>
-          <Link href="register">
-            <AuthButton color="secondary">Register</AuthButton>
-          </Link>
+          {loading ? (
+            <LoadingBox>Loading...</LoadingBox>
+          ) : data?.currentUser ? (
+            <div>Logout</div>
+          ) : (
+            <>
+              <Link href="login">
+                <AuthButton color="secondary">Login</AuthButton>
+              </Link>
+              <Link href="register">
+                <AuthButton color="secondary">Register</AuthButton>
+              </Link>{' '}
+            </>
+          )}
         </ToolBar>
       </AppBar>
     </HideOnScroll>
   )
 }
+
+const LoadingBox = styled.div`
+  margin-right: 7px;
+`
 
 const AppLogo = styled.img`
   margin-right: 5px;

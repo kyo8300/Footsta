@@ -6,6 +6,7 @@ import {
   Arg,
   Ctx,
   ObjectType,
+  Query,
 } from 'type-graphql'
 import { getManager } from 'typeorm'
 import { isEmail, validate } from 'class-validator'
@@ -44,6 +45,15 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
+  // Query
+  @Query(() => User, { nullable: true })
+  currentUser(@Ctx() { session }: Express.Session) {
+    if (!session.userId) return null
+
+    return User.findOne(session.userId)
+  }
+
+  // Mutation
   @Mutation(() => UserResponse)
   async register(
     @Arg('data') data: AddUserInput,

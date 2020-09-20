@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { useLoginMutation } from '../generated/graphql'
+import { useLoginMutation, useCurrentUserQuery } from '../generated/graphql'
 import Container from '@material-ui/core/Container'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Typography from '@material-ui/core/Typography'
@@ -22,6 +22,10 @@ type LoginInputs = {
 
 const Login: React.FC = () => {
   const router = useRouter()
+  const { data } = useCurrentUserQuery()
+  if (data?.currentUser) {
+    router.push('/')
+  }
   const { register, handleSubmit } = useForm<LoginInputs>()
   const [errorField, setErrorField] = useState({ errorType: '', message: '' })
   const [login] = useLoginMutation()
@@ -52,7 +56,7 @@ const Login: React.FC = () => {
       <Box textAlign="center" marginTop="50px">
         <VpnKeyOutlinedIcon fontSize="large" color="secondary" />
         <Typography variant="h6" color="secondary">
-          Sign In
+          Login
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
