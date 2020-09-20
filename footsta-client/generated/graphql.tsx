@@ -18,7 +18,7 @@ export type Query = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  register: User;
+  register: UserResponse;
   login: User;
 };
 
@@ -31,6 +31,18 @@ export type MutationRegisterArgs = {
 export type MutationLoginArgs = {
   password: Scalars['String'];
   email: Scalars['String'];
+};
+
+export type UserResponse = {
+  __typename?: 'UserResponse';
+  errors?: Maybe<Array<FieldError>>;
+  user?: Maybe<User>;
+};
+
+export type FieldError = {
+  __typename?: 'FieldError';
+  field: Scalars['String'];
+  message: Scalars['String'];
 };
 
 export type User = {
@@ -58,8 +70,14 @@ export type RegisterMutationVariables = Exact<{
 export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register: (
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
+    { __typename?: 'UserResponse' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>> }
   ) }
 );
 
@@ -67,11 +85,17 @@ export type RegisterMutation = (
 export const RegisterDocument = gql`
     mutation Register($username: String!, $password: String!, $email: String!) {
   register(data: {username: $username, password: $password, email: $email}) {
-    id
-    username
-    email
-    createdAt
-    updatedAt
+    user {
+      id
+      username
+      email
+      createdAt
+      updatedAt
+    }
+    errors {
+      field
+      message
+    }
   }
 }
     `;

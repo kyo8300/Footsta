@@ -1,4 +1,12 @@
-import { Resolver, Mutation, InputType, Field, Arg, Ctx } from 'type-graphql'
+import {
+  Resolver,
+  Mutation,
+  InputType,
+  Field,
+  Arg,
+  Ctx,
+  ObjectType,
+} from 'type-graphql'
 import { getManager } from 'typeorm'
 import { isEmail, validate } from 'class-validator'
 import bcrypt from 'bcrypt'
@@ -16,16 +24,41 @@ class AddUserInput implements Partial<User> {
   password: string
 }
 
+@ObjectType()
+class FieldError {
+  @Field()
+  field: string
+
+  @Field()
+  message: string
+}
+
+@ObjectType()
+class UserResponse {
+  @Field(() => [FieldError], { nullable: true })
+  errors?: FieldError[]
+
+  @Field(() => User, { nullable: true })
+  user?: User
+}
+
 @Resolver()
 export class UserResolver {
-  @Mutation(() => User)
+  @Mutation(() => UserResponse)
   async register(
     @Arg('data') data: AddUserInput,
     @Ctx() { session }: Express.Session
-  ): Promise<User> {
+  ): Promise<UserResponse> {
     const isExist = await User.findOne({ email: data.email })
     if (isExist) {
-      throw new Error('User already exist!')
+      return {
+        errors: [
+          {
+            field: 'email',
+            message: 'User already exist!',
+          },
+        ],
+      }
     }
 
     const user = new User()
@@ -37,15 +70,21 @@ export class UserResolver {
     const errors = await validate(user)
     if (errors.length > 0) {
       console.log(errors)
-      throw new Error(`Validation failed!`)
+      return {
+        errors: [
+          {
+            field: errors[0].property,
+            message: errors[0].constraints?.length || 'Error Occurred',
+          },
+        ],
+      }
     } else {
-      console.log(user)
       await getManager().save(user)
     }
 
     session.userId = user.id
 
-    return user
+    return { user }
   }
 
   @Mutation(() => User)

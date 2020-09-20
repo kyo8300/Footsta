@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { useForm, SubmitHandler } from 'react-hook-form'
-// import { useRegisterMutation } from '../generated/graphql'
+import { useRegisterMutation } from '../generated/graphql'
 import Container from '@material-ui/core/Container'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Typography from '@material-ui/core/Typography'
@@ -23,14 +24,36 @@ type RegisterInputs = {
 }
 
 const Register: React.FC = () => {
-  const { register: formRegister, handleSubmit } = useForm<RegisterInputs>()
-  //   const [register] = useRegisterMutation()
-  const onSubmit: SubmitHandler<RegisterInputs> = (data) => {
+  const router = useRouter()
+  const { register: formRegister, handleSubmit, errors } = useForm<
+    RegisterInputs
+  >()
+  const [errorField, setErrorField] = useState({ errorType: '', message: '' })
+  const [register] = useRegisterMutation()
+  const onSubmit: SubmitHandler<RegisterInputs> = async (data) => {
     if (data.password !== data.confirmPassword) {
-      console.log('Weepr')
+      setErrorField({ errorType: 'password', message: 'Password not matched.' })
       return
     }
-    console.log(data)
+    const res = await register({
+      variables: {
+        username: data.username,
+        password: data.password,
+        email: data.email,
+      },
+    })
+
+    if (res.data?.register.errors) {
+      setErrorField({
+        errorType: res.data?.register.errors[0].field,
+        message: res.data?.register.errors[0].message,
+      })
+      return
+    }
+
+    // Successfully Registered
+    setErrorField({ errorType: '', message: '' })
+    router.push('/')
   }
 
   return (
@@ -44,10 +67,10 @@ const Register: React.FC = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
             margin="normal"
-            // required
+            required
             fullWidth
             type="text"
-            label="Username"
+            label="Username (2 ~ 20 characters)"
             name="username"
             autoComplete="username"
             autoFocus
@@ -60,10 +83,14 @@ const Register: React.FC = () => {
               ),
             }}
             inputRef={formRegister({ minLength: 2, maxLength: 20 })}
+            error={
+              errors.username?.type === 'maxLength' ||
+              errors.username?.type === 'minLength'
+            }
           />
           <TextField
             margin="normal"
-            // required
+            required
             fullWidth
             type="email"
             label="Email Address"
@@ -78,10 +105,14 @@ const Register: React.FC = () => {
               ),
             }}
             inputRef={formRegister}
+            error={errorField.errorType === 'email'}
+            helperText={
+              errorField.errorType === 'email' ? errorField.message : ''
+            }
           />
           <TextField
             margin="normal"
-            // required
+            required
             fullWidth
             type="password"
             label="Password"
@@ -96,10 +127,14 @@ const Register: React.FC = () => {
               ),
             }}
             inputRef={formRegister}
+            error={errorField.errorType === 'password'}
+            helperText={
+              errorField.errorType === 'password' ? errorField.message : ''
+            }
           />
           <TextField
             margin="normal"
-            // required
+            required
             fullWidth
             type="password"
             label="Confirm Password"
