@@ -87,28 +87,49 @@ export class UserResolver {
     return { user }
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UserResponse)
   async login(
     @Arg('email') email: string,
     @Arg('password') password: string,
     @Ctx() { session }: Express.Session
-  ): Promise<User> {
+  ): Promise<UserResponse> {
     if (!isEmail(email)) {
-      throw new Error('Email is not validate')
+      return {
+        errors: [
+          {
+            field: 'email',
+            message: 'Email is not validate',
+          },
+        ],
+      }
     }
 
     const user = await User.findOne({ email })
     if (!user) {
-      throw new Error('User does not exist!')
+      return {
+        errors: [
+          {
+            field: 'email',
+            message: 'User does not exist!',
+          },
+        ],
+      }
     }
 
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) {
-      throw new Error('Password is incorrect')
+      return {
+        errors: [
+          {
+            field: 'password',
+            message: 'Passwor is incorrect',
+          },
+        ],
+      }
     }
 
     session.userId = user.id
 
-    return user
+    return { user }
   }
 }
