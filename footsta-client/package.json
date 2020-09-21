@@ -12,6 +12,7 @@
     "@material-ui/icons": "^4.9.1",
     "graphql": "^15.3.0",
     "next": "latest",
+    "next-with-apollo": "^5.1.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-hook-form": "^6.8.3",

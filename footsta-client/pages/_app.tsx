@@ -8,15 +8,21 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Layout from '../components/layout/Layout'
 import theme from '../components/theme'
 
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
+import {
+  ApolloProvider,
+  ApolloClient,
+  NormalizedCacheObject,
+} from '@apollo/client'
+import withApollo from '../utils/withApollo'
+import { getDataFromTree } from '@apollo/client/react/ssr'
 
-const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
-  credentials: 'include',
-  cache: new InMemoryCache(),
-})
+interface Props {
+  pageProps: AppProps
+  Component: React.ElementType
+  apollo: ApolloClient<NormalizedCacheObject>
+}
 
-const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
+function MyApp({ pageProps, Component, apollo }: Props): JSX.Element {
   useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side')
     if (jssStyles) {
@@ -60,7 +66,12 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
           sizes="16x16"
           href="/images/favicon-16x16.png"
         />
-        <link rel="manifest" href="/images/site.webmanifest" />
+        <link rel="android-touch-icon.png" />
+        <link
+          rel="icon"
+          href="images/png"
+          color="/images/android-chrome-192x192.png"
+        />
         <link
           rel="mask-icon"
           href="/images/safari-pinned-tab.svg"
@@ -74,7 +85,7 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
       <StylesProvider injectFirst>
         <MaterialUIThemeProvider theme={theme}>
           <StyledComponentsThemeProvider theme={theme}>
-            <ApolloProvider client={client}>
+            <ApolloProvider client={apollo}>
               <CssBaseline />
               <Layout>
                 <Component {...pageProps} />
@@ -87,4 +98,4 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   )
 }
 
-export default MyApp
+export default withApollo(MyApp, { getDataFromTree })
