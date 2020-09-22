@@ -12,15 +12,15 @@ const ioredis_1 = __importDefault(require("ioredis"));
 const express_session_1 = __importDefault(require("express-session"));
 const connect_redis_1 = __importDefault(require("connect-redis"));
 const type_graphql_1 = require("type-graphql");
-const test_1 = require("./resolvers/test");
 const user_1 = require("./resolvers/user");
 const User_1 = require("./entity/User");
+const Thread_1 = require("./entity/Thread");
 const path_1 = __importDefault(require("path"));
 async function main() {
     const connectionOptions = await typeorm_1.getConnectionOptions();
     Object.assign(connectionOptions, {
         migrations: [path_1.default.join(__dirname, './migration/*')],
-        entities: [User_1.User],
+        entities: [User_1.User, Thread_1.Thread],
     });
     await typeorm_1.createConnection(connectionOptions).catch((err) => console.error(err));
     const app = express_1.default();
@@ -44,7 +44,7 @@ async function main() {
         saveUninitialized: false,
     }));
     const schema = await type_graphql_1.buildSchema({
-        resolvers: [test_1.TestResolver, user_1.UserResolver],
+        resolvers: [user_1.UserResolver],
     });
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema,

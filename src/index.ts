@@ -7,9 +7,9 @@ import Redis from 'ioredis'
 import session from 'express-session'
 import connectRedis from 'connect-redis'
 import { buildSchema } from 'type-graphql'
-import { TestResolver } from './resolvers/test'
 import { UserResolver } from './resolvers/user'
 import { User } from './entity/User'
+import { Thread } from './entity/Thread'
 import path from 'path'
 
 async function main() {
@@ -17,7 +17,7 @@ async function main() {
   const connectionOptions = await getConnectionOptions()
   Object.assign(connectionOptions, {
     migrations: [path.join(__dirname, './migration/*')],
-    entities: [User],
+    entities: [User, Thread],
   })
   await createConnection(connectionOptions).catch((err) => console.error(err))
 
@@ -51,7 +51,7 @@ async function main() {
 
   // TypeGraphQL resolvers
   const schema = await buildSchema({
-    resolvers: [TestResolver, UserResolver],
+    resolvers: [UserResolver],
   })
 
   // Resolvers and Context connet to Apollo Server
