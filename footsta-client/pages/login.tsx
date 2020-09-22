@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { useLoginMutation, useCurrentUserQuery } from '../generated/graphql'
+import {
+  useLoginMutation,
+  useCurrentUserQuery,
+  CurrentUserDocument,
+} from '../generated/graphql'
 import Container from '@material-ui/core/Container'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Typography from '@material-ui/core/Typography'
@@ -23,9 +27,12 @@ type LoginInputs = {
 const Login: React.FC = () => {
   const router = useRouter()
   const { data } = useCurrentUserQuery()
-  if (data?.currentUser) {
-    router.push('/')
-  }
+  useEffect(() => {
+    if (data?.currentUser) {
+      router.push('/')
+    }
+  }, [data])
+
   const { register, handleSubmit } = useForm<LoginInputs>()
   const [errorField, setErrorField] = useState({ errorType: '', message: '' })
   const [login] = useLoginMutation()
@@ -34,6 +41,15 @@ const Login: React.FC = () => {
       variables: {
         email: data.email,
         password: data.password,
+      },
+      update: (store, { data }) => {
+        store.writeQuery({
+          query: CurrentUserDocument,
+          data: {
+            __typename: 'Query',
+            currentUser: data?.login.user,
+          },
+        })
       },
     })
 
