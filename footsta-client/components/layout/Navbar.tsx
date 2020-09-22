@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
-import { useCurrentUserQuery } from '../../generated/graphql'
+import { useCurrentUserQuery, useLogoutMutation } from '../../generated/graphql'
 import useScrollTrigger from '@material-ui/core/useScrollTrigger'
 import AppBar from '@material-ui/core/AppBar'
 import Box from '@material-ui/core/Box'
@@ -29,6 +29,7 @@ function HideOnScroll(props: Props) {
 
 const Navbar: React.FC = (props) => {
   const { data, loading } = useCurrentUserQuery()
+  const [logout, { client }] = useLogoutMutation()
 
   return (
     <HideOnScroll {...props}>
@@ -50,7 +51,15 @@ const Navbar: React.FC = (props) => {
           {loading ? (
             <LoadingBox>Loading...</LoadingBox>
           ) : data?.currentUser ? (
-            <div>Logout</div>
+            <AuthButton
+              color="secondary"
+              onClick={() => {
+                logout()
+                client.resetStore()
+              }}
+            >
+              Logout
+            </AuthButton>
           ) : (
             <>
               <Link href="login">

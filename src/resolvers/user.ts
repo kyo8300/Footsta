@@ -103,6 +103,16 @@ export class UserResolver {
     @Arg('password') password: string,
     @Ctx() { session }: Express.Session
   ): Promise<UserResponse> {
+    if (session.userId) {
+      return {
+        errors: [
+          {
+            field: 'email',
+            message: 'You already logged in.',
+          },
+        ],
+      }
+    }
     if (!isEmail(email)) {
       return {
         errors: [
@@ -141,5 +151,19 @@ export class UserResolver {
     session.userId = user.id
 
     return { user }
+  }
+
+  @Mutation(() => Boolean)
+  async logout(@Ctx() { res, session }: Express.Session) {
+    if (!session.userId) return false
+
+    try {
+      await session.destroy()
+      res.clearCookie('userId')
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
   }
 }

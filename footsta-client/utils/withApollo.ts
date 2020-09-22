@@ -7,11 +7,11 @@ export default withApollo(({ initialState, headers }) => {
     credentials: 'include',
     cache: new InMemoryCache().restore(initialState || {}),
     headers: {
-      cookie: (headers && headers.cookie) || '',
-      // cookie:
-      //   (typeof window === 'undefined'
-      //     ? headers && headers.cookie
-      //     : undefined) || '',
+      // cookie: (headers && headers.cookie) || '',
+      cookie:
+        (typeof window === 'undefined'
+          ? headers && headers.cookie
+          : undefined) || '',
     },
   })
 })

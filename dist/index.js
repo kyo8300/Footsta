@@ -40,7 +40,7 @@ async function main() {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             sameSite: 'lax',
         },
-        name: 'userid',
+        name: 'userId',
         saveUninitialized: false,
     }));
     const schema = await type_graphql_1.buildSchema({
@@ -48,9 +48,10 @@ async function main() {
     });
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema,
-        context: ({ req }) => ({
+        context: ({ req, res }) => ({
             redis: redisClient,
             session: req.session,
+            res,
         }),
         playground: {
             settings: {

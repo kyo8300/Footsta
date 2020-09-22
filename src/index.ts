@@ -44,7 +44,7 @@ async function main() {
         sameSite: 'lax',
         // secure: true
       },
-      name: 'userid',
+      name: 'userId',
       saveUninitialized: false,
     })
   )
@@ -57,9 +57,10 @@ async function main() {
   // Resolvers and Context connet to Apollo Server
   const apolloServer = new ApolloServer({
     schema,
-    context: ({ req }) => ({
+    context: ({ req, res }) => ({
       redis: redisClient,
       session: req.session,
+      res,
     }),
     playground: {
       settings: {
