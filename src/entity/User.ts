@@ -10,6 +10,7 @@ import {
 import { ObjectType, Field, ID } from 'type-graphql'
 import { Length, IsEmail } from 'class-validator'
 import { Thread } from './Thread'
+import { Response } from './Response'
 
 @ObjectType()
 @Entity()
@@ -31,9 +32,11 @@ export class User extends BaseEntity {
   @Column()
   password: string
 
-  @Field(() => [Thread])
   @OneToMany(() => Thread, (thread) => thread.owner)
   threads: Thread[]
+
+  @OneToMany(() => Response, (response) => response.user)
+  responses: Response[]
 
   @Field(() => String)
   @CreateDateColumn()

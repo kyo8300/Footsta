@@ -14,15 +14,17 @@ const connect_redis_1 = __importDefault(require("connect-redis"));
 const type_graphql_1 = require("type-graphql");
 const user_1 = require("./resolvers/user");
 const thread_1 = require("./resolvers/thread");
+const response_1 = require("./resolvers/response");
 const authChecker_1 = require("./utils/authChecker");
 const User_1 = require("./entity/User");
 const Thread_1 = require("./entity/Thread");
+const Response_1 = require("./entity/Response");
 const path_1 = __importDefault(require("path"));
 async function main() {
     const connectionOptions = await typeorm_1.getConnectionOptions();
     Object.assign(connectionOptions, {
         migrations: [path_1.default.join(__dirname, './migration/*')],
-        entities: [User_1.User, Thread_1.Thread],
+        entities: [User_1.User, Thread_1.Thread, Response_1.Response],
     });
     await typeorm_1.createConnection(connectionOptions).catch((err) => console.error(err));
     const app = express_1.default();
@@ -46,7 +48,7 @@ async function main() {
         saveUninitialized: false,
     }));
     const schema = await type_graphql_1.buildSchema({
-        resolvers: [user_1.UserResolver, thread_1.ThreadResolver],
+        resolvers: [user_1.UserResolver, thread_1.ThreadResolver, response_1.ResponseResolver],
         authChecker: authChecker_1.authChecker,
     });
     const apolloServer = new apollo_server_express_1.ApolloServer({

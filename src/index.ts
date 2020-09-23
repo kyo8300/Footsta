@@ -9,9 +9,11 @@ import connectRedis from 'connect-redis'
 import { buildSchema } from 'type-graphql'
 import { UserResolver } from './resolvers/user'
 import { ThreadResolver } from './resolvers/thread'
+import { ResponseResolver } from './resolvers/response'
 import { authChecker } from './utils/authChecker'
 import { User } from './entity/User'
 import { Thread } from './entity/Thread'
+import { Response } from './entity/Response'
 import path from 'path'
 
 async function main() {
@@ -19,7 +21,7 @@ async function main() {
   const connectionOptions = await getConnectionOptions()
   Object.assign(connectionOptions, {
     migrations: [path.join(__dirname, './migration/*')],
-    entities: [User, Thread],
+    entities: [User, Thread, Response],
   })
   await createConnection(connectionOptions).catch((err) => console.error(err))
 
@@ -53,7 +55,7 @@ async function main() {
 
   // TypeGraphQL resolvers
   const schema = await buildSchema({
-    resolvers: [UserResolver, ThreadResolver],
+    resolvers: [UserResolver, ThreadResolver, ResponseResolver],
     authChecker,
   })
 

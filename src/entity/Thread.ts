@@ -5,11 +5,12 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   ManyToOne,
-  // RelationId,
+  OneToMany,
 } from 'typeorm'
 import { ObjectType, Field, ID } from 'type-graphql'
 import { Length } from 'class-validator'
 import { User } from './User'
+import { Response } from './Response'
 
 @ObjectType()
 @Entity()
@@ -28,9 +29,11 @@ export class Thread extends BaseEntity {
   @Length(2, 1024)
   text: string
 
-  @Field(() => User)
   @ManyToOne(() => User, (user) => user.threads)
   owner: User
+
+  @OneToMany(() => Response, (response) => response.thread)
+  responses: Response
 
   @Field()
   @Column()
