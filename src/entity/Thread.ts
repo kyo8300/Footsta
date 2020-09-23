@@ -4,9 +4,8 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
-  RelationId,
+  // RelationId,
 } from 'typeorm'
 import { ObjectType, Field, ID } from 'type-graphql'
 import { Length } from 'class-validator'
@@ -17,7 +16,7 @@ import { User } from './User'
 export class Thread extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
-  id: number
+  readonly id: number
 
   @Field()
   @Column()
@@ -32,14 +31,12 @@ export class Thread extends BaseEntity {
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.threads)
   owner: User
-  @RelationId((thread: Thread) => thread.owner)
+
+  @Field()
+  @Column()
   ownerId: number
 
   @Field(() => String)
   @CreateDateColumn()
   createdAt: Date
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt: Date
 }

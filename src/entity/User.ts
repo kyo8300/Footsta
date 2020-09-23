@@ -16,7 +16,7 @@ import { Thread } from './Thread'
 export class User extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
-  id: number
+  readonly id: number
 
   @Field(() => String)
   @Column()

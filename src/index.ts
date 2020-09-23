@@ -8,6 +8,8 @@ import session from 'express-session'
 import connectRedis from 'connect-redis'
 import { buildSchema } from 'type-graphql'
 import { UserResolver } from './resolvers/user'
+import { ThreadResolver } from './resolvers/thread'
+import { authChecker } from './utils/authChecker'
 import { User } from './entity/User'
 import { Thread } from './entity/Thread'
 import path from 'path'
@@ -51,7 +53,8 @@ async function main() {
 
   // TypeGraphQL resolvers
   const schema = await buildSchema({
-    resolvers: [UserResolver],
+    resolvers: [UserResolver, ThreadResolver],
+    authChecker,
   })
 
   // Resolvers and Context connet to Apollo Server
