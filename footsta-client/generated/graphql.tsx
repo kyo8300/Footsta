@@ -13,8 +13,8 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  test: Scalars['String'];
   currentUser?: Maybe<User>;
+  getThreads?: Maybe<Array<Thread>>;
 };
 
 export type User = {
@@ -26,11 +26,22 @@ export type User = {
   updatedAt: Scalars['String'];
 };
 
+export type Thread = {
+  __typename?: 'Thread';
+  id: Scalars['ID'];
+  title: Scalars['String'];
+  text: Scalars['String'];
+  ownerId: Scalars['Float'];
+  createdAt: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  createThread?: Maybe<Thread>;
+  createResponse?: Maybe<Response>;
 };
 
 
@@ -42,6 +53,17 @@ export type MutationRegisterArgs = {
 export type MutationLoginArgs = {
   password: Scalars['String'];
   email: Scalars['String'];
+};
+
+
+export type MutationCreateThreadArgs = {
+  data: CreateThreadInput;
+};
+
+
+export type MutationCreateResponseArgs = {
+  text: Scalars['String'];
+  threadId: Scalars['Float'];
 };
 
 export type UserResponse = {
@@ -60,6 +82,17 @@ export type AddUserInput = {
   username: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type CreateThreadInput = {
+  title: Scalars['String'];
+  text: Scalars['String'];
+};
+
+export type Response = {
+  __typename?: 'Response';
+  text: Scalars['String'];
+  createdAt: Scalars['String'];
 };
 
 export type LoginMutationVariables = Exact<{
@@ -120,6 +153,17 @@ export type CurrentUserQuery = (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
   )> }
+);
+
+export type GetThreadsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetThreadsQuery = (
+  { __typename?: 'Query' }
+  & { getThreads?: Maybe<Array<(
+    { __typename?: 'Thread' }
+    & Pick<Thread, 'id' | 'title' | 'text' | 'ownerId' | 'createdAt'>
+  )>> }
 );
 
 
@@ -275,3 +319,39 @@ export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export const GetThreadsDocument = gql`
+    query GetThreads {
+  getThreads {
+    id
+    title
+    text
+    ownerId
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetThreadsQuery__
+ *
+ * To run a query within a React component, call `useGetThreadsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetThreadsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetThreadsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetThreadsQuery(baseOptions?: Apollo.QueryHookOptions<GetThreadsQuery, GetThreadsQueryVariables>) {
+        return Apollo.useQuery<GetThreadsQuery, GetThreadsQueryVariables>(GetThreadsDocument, baseOptions);
+      }
+export function useGetThreadsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThreadsQuery, GetThreadsQueryVariables>) {
+          return Apollo.useLazyQuery<GetThreadsQuery, GetThreadsQueryVariables>(GetThreadsDocument, baseOptions);
+        }
+export type GetThreadsQueryHookResult = ReturnType<typeof useGetThreadsQuery>;
+export type GetThreadsLazyQueryHookResult = ReturnType<typeof useGetThreadsLazyQuery>;
+export type GetThreadsQueryResult = Apollo.QueryResult<GetThreadsQuery, GetThreadsQueryVariables>;

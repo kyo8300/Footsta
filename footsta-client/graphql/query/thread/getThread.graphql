@@ -1,0 +1,9 @@
+query GetThreads {
+  getThreads {
+    id
+    title
+    text
+    ownerId
+    createdAt
+  }
+}
