@@ -5,6 +5,7 @@ import { ThemeProvider as StyledComponentsThemeProvider } from 'styled-component
 import { ThemeProvider as MaterialUIThemeProvider } from '@material-ui/core/styles'
 import { StylesProvider } from '@material-ui/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import Container from '@material-ui/core/Container'
 import Layout from '../components/layout/Layout'
 import theme from '../components/theme'
 
@@ -88,7 +89,9 @@ function MyApp({ pageProps, Component, apollo }: Props): JSX.Element {
             <ApolloProvider client={apollo}>
               <CssBaseline />
               <Layout>
-                <Component {...pageProps} />
+                <Container>
+                  <Component {...pageProps} />
+                </Container>
               </Layout>
             </ApolloProvider>
           </StyledComponentsThemeProvider>

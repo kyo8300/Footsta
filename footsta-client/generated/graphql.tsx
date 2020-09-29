@@ -15,6 +15,12 @@ export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<User>;
   getThreads?: Maybe<Array<Thread>>;
+  getThread?: Maybe<Thread>;
+};
+
+
+export type QueryGetThreadArgs = {
+  threadId: Scalars['Int'];
 };
 
 export type User = {
@@ -152,6 +158,19 @@ export type CurrentUserQuery = (
   & { currentUser?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
+  )> }
+);
+
+export type GetThreadQueryVariables = Exact<{
+  threadId: Scalars['Int'];
+}>;
+
+
+export type GetThreadQuery = (
+  { __typename?: 'Query' }
+  & { getThread?: Maybe<(
+    { __typename?: 'Thread' }
+    & Pick<Thread, 'id' | 'title' | 'text' | 'ownerId' | 'createdAt'>
   )> }
 );
 
@@ -319,6 +338,43 @@ export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export const GetThreadDocument = gql`
+    query GetThread($threadId: Int!) {
+  getThread(threadId: $threadId) {
+    id
+    title
+    text
+    ownerId
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetThreadQuery__
+ *
+ * To run a query within a React component, call `useGetThreadQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetThreadQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetThreadQuery({
+ *   variables: {
+ *      threadId: // value for 'threadId'
+ *   },
+ * });
+ */
+export function useGetThreadQuery(baseOptions?: Apollo.QueryHookOptions<GetThreadQuery, GetThreadQueryVariables>) {
+        return Apollo.useQuery<GetThreadQuery, GetThreadQueryVariables>(GetThreadDocument, baseOptions);
+      }
+export function useGetThreadLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThreadQuery, GetThreadQueryVariables>) {
+          return Apollo.useLazyQuery<GetThreadQuery, GetThreadQueryVariables>(GetThreadDocument, baseOptions);
+        }
+export type GetThreadQueryHookResult = ReturnType<typeof useGetThreadQuery>;
+export type GetThreadLazyQueryHookResult = ReturnType<typeof useGetThreadLazyQuery>;
+export type GetThreadQueryResult = Apollo.QueryResult<GetThreadQuery, GetThreadQueryVariables>;
 export const GetThreadsDocument = gql`
     query GetThreads {
   getThreads {

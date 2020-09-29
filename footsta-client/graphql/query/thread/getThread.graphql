@@ -1,5 +1,5 @@
-query GetThreads {
-  getThreads {
+query GetThread($threadId: Int!) {
+  getThread(threadId: $threadId) {
     id
     title
     text

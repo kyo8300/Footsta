@@ -1,10 +1,11 @@
 import React from 'react'
+import Link from 'next/link'
 import styled from 'styled-components'
 import { useGetThreadsQuery } from '../../generated/graphql'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
-import { Box } from '@material-ui/core'
+import Box from '@material-ui/core/Box'
 import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutlined'
 import { displayDate } from '../../utils/formatDate'
 
@@ -27,15 +28,17 @@ const MainThread: React.FC = () => {
       <Divider />
       <Box>
         {data?.getThreads?.map((thread) => (
-          <ThreadBox key={thread.id}>
-            <TitleDisplay>
-              <Typography variant="body2">Mike</Typography>
-              <Typography variant="subtitle1" color="secondary">
-                {thread.title}
-              </Typography>
-              <DateBox>{displayDate(thread.createdAt)}</DateBox>
-            </TitleDisplay>
-          </ThreadBox>
+          <Link href="/thread/[id]" as={`/thread/${thread.id}`} key={thread.id}>
+            <ThreadBox>
+              <TitleDisplay>
+                <Typography variant="body2">Mike</Typography>
+                <Typography variant="subtitle1" color="secondary">
+                  {thread.title}
+                </Typography>
+                <DateBox>{displayDate(thread.createdAt)}</DateBox>
+              </TitleDisplay>
+            </ThreadBox>
+          </Link>
         ))}
       </Box>
     </Paper>
@@ -45,6 +48,7 @@ const MainThread: React.FC = () => {
 const ThreadBox = styled(Box)`
   &:hover {
     background-color: rgba(220, 220, 220, 0.3);
+    cursor: pointer;
   }
 `
 
@@ -55,7 +59,6 @@ const ThemeDisplay = styled(Typography)`
 `
 
 const TitleDisplay = styled(Box)`
-  /* border: solid; */
   padding: 8px 0;
   margin-left: 20px;
   margin-right: 15px;

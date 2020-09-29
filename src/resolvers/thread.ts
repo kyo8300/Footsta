@@ -8,6 +8,7 @@ import {
   Ctx,
   Authorized,
   Query,
+  Int,
 } from 'type-graphql'
 import { Thread } from '../entity/Thread'
 
@@ -27,6 +28,11 @@ export class ThreadResolver {
   async getThreads(): Promise<Thread[]> {
     const threads = await Thread.find()
     return threads
+  }
+
+  @Query(() => Thread, { nullable: true })
+  async getThread(@Arg('threadId', () => Int) threadId: number) {
+    return await Thread.findOne(threadId)
   }
 
   //Mutaion

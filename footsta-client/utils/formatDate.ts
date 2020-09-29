@@ -1,4 +1,4 @@
-export const displayDate = (timestampData: string) => {
+export const displayDate = (timestampData: string | undefined) => {
   const month_english_list = [
     'Jan',
     'Feb',
@@ -13,6 +13,7 @@ export const displayDate = (timestampData: string) => {
     'Nov',
     'Dec',
   ]
+  if (typeof timestampData === 'undefined') return ''
   const convertedDate = new Date(parseInt(timestampData))
   const year = convertedDate.getFullYear()
   const int_month = convertedDate.getMonth()
