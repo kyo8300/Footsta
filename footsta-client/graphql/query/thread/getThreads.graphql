@@ -3,6 +3,9 @@ query GetThreads {
     id
     title
     text
+    owner {
+      username
+    }
     ownerId
     createdAt
   }

@@ -1,6 +1,7 @@
 import { validate } from 'class-validator'
 import { Resolver, Authorized, Mutation, Arg, Ctx } from 'type-graphql'
 import { Response } from '../entity/Response'
+import { gqlContext } from '../types'
 
 @Resolver()
 export class ResponseResolver {
@@ -9,7 +10,7 @@ export class ResponseResolver {
   async createResponse(
     @Arg('threadId') threadId: number,
     @Arg('text') text: string,
-    @Ctx() { session }: Express.Session
+    @Ctx() { session }: gqlContext
   ): Promise<Response | null> {
     console.log(session.userId)
     const newResponse = Response.create({

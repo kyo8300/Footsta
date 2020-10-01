@@ -1,7 +1,10 @@
 import { validate } from 'class-validator'
+import { User } from '../entity/User'
 import {
   Mutation,
   Resolver,
+  FieldResolver,
+  Root,
   InputType,
   Field,
   Arg,
@@ -11,6 +14,7 @@ import {
   Int,
 } from 'type-graphql'
 import { Thread } from '../entity/Thread'
+import { gqlContext } from '../types'
 
 @InputType()
 class CreateThreadInput implements Partial<Thread> {
@@ -21,7 +25,7 @@ class CreateThreadInput implements Partial<Thread> {
   text: string
 }
 
-@Resolver()
+@Resolver(() => Thread)
 export class ThreadResolver {
   //Query
   @Query(() => [Thread], { nullable: true })
@@ -40,7 +44,7 @@ export class ThreadResolver {
   @Mutation(() => Thread, { nullable: true })
   async createThread(
     @Arg('data') data: CreateThreadInput,
-    @Ctx() { session }: Express.Session
+    @Ctx() { session }: gqlContext
   ): Promise<Thread | null> {
     console.log(session.userId)
     const newThread = Thread.create({
@@ -66,4 +70,12 @@ export class ThreadResolver {
   //       return false
   //     }
   //   }
+
+  @FieldResolver(() => User)
+  async owner(
+    @Root() thread: Thread,
+    @Ctx() { userLoader }: gqlContext
+  ): Promise<User> {
+    return userLoader.load(thread.ownerId)
+  }
 }

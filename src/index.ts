@@ -15,6 +15,7 @@ import { User } from './entity/User'
 import { Thread } from './entity/Thread'
 import { Response } from './entity/Response'
 import path from 'path'
+import { createUserLoader } from './utils/dataloader'
 
 async function main() {
   // Typeorm connects to Postgres
@@ -66,6 +67,7 @@ async function main() {
       redis: redisClient,
       session: req.session,
       res,
+      userLoader: createUserLoader,
     }),
     playground: {
       settings: {

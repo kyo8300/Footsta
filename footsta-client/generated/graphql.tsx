@@ -39,6 +39,7 @@ export type Thread = {
   text: Scalars['String'];
   ownerId: Scalars['Float'];
   createdAt: Scalars['String'];
+  owner: User;
 };
 
 export type Mutation = {
@@ -171,6 +172,10 @@ export type GetThreadQuery = (
   & { getThread?: Maybe<(
     { __typename?: 'Thread' }
     & Pick<Thread, 'id' | 'title' | 'text' | 'ownerId' | 'createdAt'>
+    & { owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'username'>
+    ) }
   )> }
 );
 
@@ -182,6 +187,10 @@ export type GetThreadsQuery = (
   & { getThreads?: Maybe<Array<(
     { __typename?: 'Thread' }
     & Pick<Thread, 'id' | 'title' | 'text' | 'ownerId' | 'createdAt'>
+    & { owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'username'>
+    ) }
   )>> }
 );
 
@@ -344,6 +353,9 @@ export const GetThreadDocument = gql`
     id
     title
     text
+    owner {
+      username
+    }
     ownerId
     createdAt
   }
@@ -381,6 +393,9 @@ export const GetThreadsDocument = gql`
     id
     title
     text
+    owner {
+      username
+    }
     ownerId
     createdAt
   }

@@ -20,6 +20,7 @@ const User_1 = require("./entity/User");
 const Thread_1 = require("./entity/Thread");
 const Response_1 = require("./entity/Response");
 const path_1 = __importDefault(require("path"));
+const dataloader_1 = require("./utils/dataloader");
 async function main() {
     const connectionOptions = await typeorm_1.getConnectionOptions();
     Object.assign(connectionOptions, {
@@ -57,6 +58,7 @@ async function main() {
             redis: redisClient,
             session: req.session,
             res,
+            userLoader: dataloader_1.createUserLoader,
         }),
         playground: {
             settings: {

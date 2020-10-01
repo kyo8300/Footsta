@@ -3,6 +3,9 @@ query GetThread($threadId: Int!) {
     id
     title
     text
+    owner {
+      username
+    }
     ownerId
     createdAt
   }

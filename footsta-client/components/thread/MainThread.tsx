@@ -31,7 +31,9 @@ const MainThread: React.FC = () => {
           <Link href="/thread/[id]" as={`/thread/${thread.id}`} key={thread.id}>
             <ThreadBox>
               <TitleDisplay>
-                <Typography variant="body2">Mike</Typography>
+                <Typography variant="body2">
+                  {thread.owner.username || 'Anonymous'}
+                </Typography>
                 <Typography variant="subtitle1" color="secondary">
                   {thread.title}
                 </Typography>

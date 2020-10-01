@@ -12,6 +12,7 @@ import { getManager } from 'typeorm'
 import { isEmail, validate } from 'class-validator'
 import bcrypt from 'bcrypt'
 import { User } from '../entity/User'
+import { gqlContext } from '../types'
 
 @InputType()
 class AddUserInput implements Partial<User> {
@@ -47,7 +48,7 @@ class UserResponse {
 export class UserResolver {
   // Query
   @Query(() => User, { nullable: true })
-  currentUser(@Ctx() { session }: Express.Session) {
+  currentUser(@Ctx() { session }: gqlContext) {
     if (!session.userId) return null
 
     return User.findOne(session.userId)
@@ -57,7 +58,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async register(
     @Arg('data') data: AddUserInput,
-    @Ctx() { session }: Express.Session
+    @Ctx() { session }: gqlContext
   ): Promise<UserResponse> {
     const isExist = await User.findOne({ email: data.email })
     if (isExist) {
@@ -101,7 +102,7 @@ export class UserResolver {
   async login(
     @Arg('email') email: string,
     @Arg('password') password: string,
-    @Ctx() { session }: Express.Session
+    @Ctx() { session }: gqlContext
   ): Promise<UserResponse> {
     if (session.userId) {
       return {
@@ -154,11 +155,13 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  async logout(@Ctx() { res, session }: Express.Session) {
+  async logout(@Ctx() { res, session }: gqlContext) {
     if (!session.userId) return false
 
     try {
-      await session.destroy()
+      await session.destroy(function (err) {
+        console.error(err)
+      })
       res.clearCookie('userId')
       return true
     } catch (err) {

@@ -29,7 +29,10 @@ const Thread: React.FC = () => {
           </ThreadTitle>
         </Typography>
         <Box ml={2} mt={1}>
-          <Box>1 : Anonymous : {displayDate(data?.getThread?.createdAt)}</Box>
+          <Box>
+            1 : {data?.getThread?.owner.username || 'Anonymous'} :{' '}
+            {displayDate(data?.getThread?.createdAt)}
+          </Box>
           <Box ml={1} my={1}>
             {data?.getThread?.text}
           </Box>
