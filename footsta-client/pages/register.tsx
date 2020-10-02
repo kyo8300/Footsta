@@ -73,7 +73,7 @@ const Register: React.FC = () => {
 
     // Successfully Registered
     setErrorField({ errorType: '', message: '' })
-    router.push('/')
+    router.back()
   }
 
   return (

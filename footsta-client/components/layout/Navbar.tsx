@@ -62,10 +62,10 @@ const Navbar: React.FC = (props) => {
             </AuthButton>
           ) : (
             <>
-              <Link href="login">
+              <Link href="/login">
                 <AuthButton color="secondary">Login</AuthButton>
               </Link>
-              <Link href="register">
+              <Link href="/register">
                 <AuthButton color="secondary">Register</AuthButton>
               </Link>{' '}
             </>

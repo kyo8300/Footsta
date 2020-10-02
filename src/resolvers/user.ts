@@ -159,7 +159,7 @@ export class UserResolver {
     if (!session.userId) return false
 
     try {
-      await session.destroy(function (err) {
+      session.destroy(function (err) {
         console.error(err)
       })
       res.clearCookie('userId')

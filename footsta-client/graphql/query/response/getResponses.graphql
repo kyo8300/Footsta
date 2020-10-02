@@ -1,0 +1,9 @@
+query GetResponses($threadId: Int!) {
+  getResponses(threadId: $threadId) {
+    id
+    text
+    userId
+    threadId
+    createdAt
+  }
+}

@@ -63,7 +63,7 @@ const Login: React.FC = () => {
 
     // Successfully logged in`
     setErrorField({ errorType: '', message: '' })
-    router.push('/')
+    router.back()
   }
 
   return (

@@ -16,10 +16,16 @@ export type Query = {
   currentUser?: Maybe<User>;
   getThreads?: Maybe<Array<Thread>>;
   getThread?: Maybe<Thread>;
+  getResponses: Array<Response>;
 };
 
 
 export type QueryGetThreadArgs = {
+  threadId: Scalars['Int'];
+};
+
+
+export type QueryGetResponsesArgs = {
   threadId: Scalars['Int'];
 };
 
@@ -40,6 +46,16 @@ export type Thread = {
   ownerId: Scalars['Float'];
   createdAt: Scalars['String'];
   owner: User;
+};
+
+export type Response = {
+  __typename?: 'Response';
+  id: Scalars['ID'];
+  text: Scalars['String'];
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['Int']>;
+  threadId: Scalars['Int'];
+  createdAt: Scalars['String'];
 };
 
 export type Mutation = {
@@ -70,7 +86,7 @@ export type MutationCreateThreadArgs = {
 
 export type MutationCreateResponseArgs = {
   text: Scalars['String'];
-  threadId: Scalars['Float'];
+  threadId: Scalars['Int'];
 };
 
 export type UserResponse = {
@@ -94,12 +110,6 @@ export type AddUserInput = {
 export type CreateThreadInput = {
   title: Scalars['String'];
   text: Scalars['String'];
-};
-
-export type Response = {
-  __typename?: 'Response';
-  text: Scalars['String'];
-  createdAt: Scalars['String'];
 };
 
 export type LoginMutationVariables = Exact<{
@@ -151,6 +161,20 @@ export type RegisterMutation = (
   ) }
 );
 
+export type CreateResponseMutationVariables = Exact<{
+  text: Scalars['String'];
+  threadId: Scalars['Int'];
+}>;
+
+
+export type CreateResponseMutation = (
+  { __typename?: 'Mutation' }
+  & { createResponse?: Maybe<(
+    { __typename?: 'Response' }
+    & Pick<Response, 'id' | 'text' | 'createdAt'>
+  )> }
+);
+
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -159,6 +183,19 @@ export type CurrentUserQuery = (
   & { currentUser?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
+  )> }
+);
+
+export type GetResponsesQueryVariables = Exact<{
+  threadId: Scalars['Int'];
+}>;
+
+
+export type GetResponsesQuery = (
+  { __typename?: 'Query' }
+  & { getResponses: Array<(
+    { __typename?: 'Response' }
+    & Pick<Response, 'id' | 'text' | 'userId' | 'threadId' | 'createdAt'>
   )> }
 );
 
@@ -311,6 +348,41 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const CreateResponseDocument = gql`
+    mutation CreateResponse($text: String!, $threadId: Int!) {
+  createResponse(text: $text, threadId: $threadId) {
+    id
+    text
+    createdAt
+  }
+}
+    `;
+export type CreateResponseMutationFn = Apollo.MutationFunction<CreateResponseMutation, CreateResponseMutationVariables>;
+
+/**
+ * __useCreateResponseMutation__
+ *
+ * To run a mutation, you first call `useCreateResponseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateResponseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createResponseMutation, { data, loading, error }] = useCreateResponseMutation({
+ *   variables: {
+ *      text: // value for 'text'
+ *      threadId: // value for 'threadId'
+ *   },
+ * });
+ */
+export function useCreateResponseMutation(baseOptions?: Apollo.MutationHookOptions<CreateResponseMutation, CreateResponseMutationVariables>) {
+        return Apollo.useMutation<CreateResponseMutation, CreateResponseMutationVariables>(CreateResponseDocument, baseOptions);
+      }
+export type CreateResponseMutationHookResult = ReturnType<typeof useCreateResponseMutation>;
+export type CreateResponseMutationResult = Apollo.MutationResult<CreateResponseMutation>;
+export type CreateResponseMutationOptions = Apollo.BaseMutationOptions<CreateResponseMutation, CreateResponseMutationVariables>;
 export const CurrentUserDocument = gql`
     query currentUser {
   currentUser {
@@ -347,6 +419,43 @@ export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export const GetResponsesDocument = gql`
+    query GetResponses($threadId: Int!) {
+  getResponses(threadId: $threadId) {
+    id
+    text
+    userId
+    threadId
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetResponsesQuery__
+ *
+ * To run a query within a React component, call `useGetResponsesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetResponsesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetResponsesQuery({
+ *   variables: {
+ *      threadId: // value for 'threadId'
+ *   },
+ * });
+ */
+export function useGetResponsesQuery(baseOptions?: Apollo.QueryHookOptions<GetResponsesQuery, GetResponsesQueryVariables>) {
+        return Apollo.useQuery<GetResponsesQuery, GetResponsesQueryVariables>(GetResponsesDocument, baseOptions);
+      }
+export function useGetResponsesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetResponsesQuery, GetResponsesQueryVariables>) {
+          return Apollo.useLazyQuery<GetResponsesQuery, GetResponsesQueryVariables>(GetResponsesDocument, baseOptions);
+        }
+export type GetResponsesQueryHookResult = ReturnType<typeof useGetResponsesQuery>;
+export type GetResponsesLazyQueryHookResult = ReturnType<typeof useGetResponsesLazyQuery>;
+export type GetResponsesQueryResult = Apollo.QueryResult<GetResponsesQuery, GetResponsesQueryVariables>;
 export const GetThreadDocument = gql`
     query GetThread($threadId: Int!) {
   getThread(threadId: $threadId) {

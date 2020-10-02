@@ -1,0 +1,7 @@
+mutation CreateResponse($text: String!, $threadId: Int!) {
+  createResponse(text: $text, threadId: $threadId) {
+    id
+    text
+    createdAt
+  }
+}
