@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import {
   useCurrentUserQuery,
   useCreateResponseMutation,
+  GetResponsesDocument,
 } from '../../generated/graphql'
 
 type ResponseInputs = {
@@ -22,17 +23,29 @@ type ResponseFormProps = {
 const ResponseForm: React.FC<ResponseFormProps> = ({ threadId }) => {
   const { data } = useCurrentUserQuery()
   const [createResponse] = useCreateResponseMutation()
-  const { register, handleSubmit } = useForm<ResponseInputs>()
+  const { register, handleSubmit, reset } = useForm<ResponseInputs>()
   const onSubmit: SubmitHandler<ResponseInputs> = async (data) => {
     try {
-      console.log('data', data)
-      const res = await createResponse({
+      await createResponse({
         variables: {
           text: data.text,
           threadId,
         },
+        update: (store, { data }) => {
+          store.modify({
+            fields: {
+              getResponses(existingResponses = []) {
+                const newResponse = store.writeQuery({
+                  query: GetResponsesDocument,
+                  data: data?.createResponse,
+                })
+                return [...existingResponses, newResponse]
+              },
+            },
+          })
+        },
       })
-      console.log('res', res)
+      reset({ text: '' })
     } catch (err) {
       console.error(err)
     }
