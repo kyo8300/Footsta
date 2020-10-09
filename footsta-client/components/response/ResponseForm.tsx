@@ -73,9 +73,9 @@ const ResponseForm: React.FC<ResponseFormProps> = ({ threadId }) => {
             variant="outlined"
             color="secondary"
             margin="normal"
-            required
             fullWidth
             inputRef={register}
+            disabled
           />
           <Box my="4px">
             <TextField

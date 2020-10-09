@@ -3,6 +3,9 @@ query GetResponses($threadId: Int!) {
     id
     text
     userId
+    user {
+      username
+    }
     threadId
     createdAt
   }

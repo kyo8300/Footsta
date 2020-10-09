@@ -30,8 +30,7 @@ export class ThreadResolver {
   //Query
   @Query(() => [Thread], { nullable: true })
   async getThreads(): Promise<Thread[]> {
-    const threads = await Thread.find()
-    return threads
+    return await Thread.find()
   }
 
   @Query(() => Thread, { nullable: true })

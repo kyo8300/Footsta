@@ -34,7 +34,9 @@ const Thread: React.FC = () => {
               {threadData?.getThread?.title}
             </Box>
             <Divider orientation="vertical" flexItem />
-            <Box ml={2}>{displayDate(threadData?.getThread?.createdAt)}</Box>
+            <Box ml={2}>
+              {displayDate(threadData?.getThread?.createdAt, false)}
+            </Box>
           </ThreadTitle>
         </Typography>
         <Box mx={2} mt={1}>

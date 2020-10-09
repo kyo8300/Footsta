@@ -1,4 +1,7 @@
-export const displayDate = (timestampData: string | undefined) => {
+export const displayDate = (
+  timestampData: string | undefined,
+  isHours = true
+) => {
   const month_english_list = [
     'Jan',
     'Feb',
@@ -8,7 +11,7 @@ export const displayDate = (timestampData: string | undefined) => {
     'June',
     'July',
     'Aug',
-    'Sept',
+    'Sep',
     'Oct',
     'Nov',
     'Dec',
@@ -19,6 +22,13 @@ export const displayDate = (timestampData: string | undefined) => {
   const int_month = convertedDate.getMonth()
   const month = month_english_list[int_month]
   const date = convertedDate.getDate()
-  const formatDate = `${month} ${date}, ${year}`
+  const hours = convertedDate.getHours()
+  const minutes = convertedDate.getMinutes()
+  const seconds = convertedDate.getSeconds()
+  const formatDate = isHours
+    ? `${month} ${date}, ${year} ${hours < 10 ? 0 : ''}${hours}:${
+        minutes < 10 ? 0 : ''
+      }${minutes}:${seconds < 10 ? 0 : ''}${seconds}`
+    : `${month} ${date}, ${year}`
   return formatDate
 }
