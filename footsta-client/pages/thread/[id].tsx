@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import {
   useGetThreadQuery,
   useGetResponsesQuery,
+  useCurrentUserQuery,
 } from '../../generated/graphql'
 import Paper from '@material-ui/core/Paper'
 import Box from '@material-ui/core/Box'
@@ -14,7 +15,7 @@ import Response from '../../components/response/Response'
 import ResponseForm from '../../components/response/ResponseForm'
 
 const Thread: React.FC = () => {
-  const fineTuneResID = 2
+  const fineTuneIdx = 2
   const router = useRouter()
   const { id } = router.query
   const threadId = typeof id === 'string' ? parseInt(id) : -1
@@ -24,6 +25,8 @@ const Thread: React.FC = () => {
   const { data: responseData } = useGetResponsesQuery({
     variables: { threadId },
   })
+  const { data: userData } = useCurrentUserQuery()
+  const username = userData?.currentUser?.username || 'Anonymous'
 
   return (
     <Box my={3}>
@@ -47,15 +50,19 @@ const Thread: React.FC = () => {
           <Box ml={1} mt={1} mb={3}>
             {threadData?.getThread?.text}
           </Box>
-          {responseData?.getResponses?.map((response, idx) => (
-            <Response
-              key={response.id}
-              response={response}
-              idx={idx + fineTuneResID}
-            />
-          ))}
+          {responseData?.getResponses?.map((response, idx) => {
+            return (
+              <Response
+                key={response.id}
+                response={response}
+                idx={idx + fineTuneIdx}
+                currentUser={username}
+                level={0}
+              />
+            )
+          })}
         </Box>
-        <ResponseForm threadId={threadId} />
+        <ResponseForm threadId={threadId} username={username} />
       </Paper>
     </Box>
   )

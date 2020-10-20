@@ -6,7 +6,6 @@ import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import {
-  useCurrentUserQuery,
   useCreateResponseMutation,
   GetResponsesDocument,
 } from '../../generated/graphql'
@@ -18,10 +17,10 @@ type ResponseInputs = {
 
 type ResponseFormProps = {
   threadId: number
+  username: string
 }
 
-const ResponseForm: React.FC<ResponseFormProps> = ({ threadId }) => {
-  const { data } = useCurrentUserQuery()
+const ResponseForm: React.FC<ResponseFormProps> = ({ threadId, username }) => {
   const [createResponse] = useCreateResponseMutation()
   const { register, handleSubmit, reset } = useForm<ResponseInputs>()
   const onSubmit: SubmitHandler<ResponseInputs> = async (data) => {
@@ -54,7 +53,7 @@ const ResponseForm: React.FC<ResponseFormProps> = ({ threadId }) => {
   return (
     <Box mx={2} pb={3} mt={3}>
       <Typography color="secondary" variant="body1">
-        Post a Reply
+        Post a Response
       </Typography>
 
       <Box
@@ -68,7 +67,7 @@ const ResponseForm: React.FC<ResponseFormProps> = ({ threadId }) => {
           <TextField
             label="Username"
             name="username"
-            defaultValue={data?.currentUser?.username || 'Anonymous'}
+            defaultValue={username}
             size="small"
             variant="outlined"
             color="secondary"
@@ -79,7 +78,7 @@ const ResponseForm: React.FC<ResponseFormProps> = ({ threadId }) => {
           />
           <Box my="4px">
             <TextField
-              label="Response"
+              label="Write your thoughts"
               name="text"
               variant="outlined"
               color="secondary"

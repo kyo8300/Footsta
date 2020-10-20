@@ -1,12 +1,20 @@
 query GetResponses($threadId: Int!) {
   getResponses(threadId: $threadId) {
-    id
-    text
-    userId
-    user {
-      username
+    ...ResponseInfo
+    childResponses {
+      ...ResponseInfo
+      childResponses {
+        ...ResponseInfo
+        childResponses {
+          ...ResponseInfo
+          childResponses {
+            ...ResponseInfo
+            childResponses {
+              ...ResponseInfo
+            }
+          }
+        }
+      }
     }
-    threadId
-    createdAt
   }
 }

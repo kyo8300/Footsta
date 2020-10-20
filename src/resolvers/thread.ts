@@ -45,7 +45,6 @@ export class ThreadResolver {
     @Arg('data') data: CreateThreadInput,
     @Ctx() { session }: gqlContext
   ): Promise<Thread | null> {
-    console.log(session.userId)
     const newThread = Thread.create({
       ...data,
       ownerId: session.userId,

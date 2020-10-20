@@ -1,0 +1,10 @@
+fragment ResponseInfo on Response {
+  id
+  text
+  userId
+  user {
+    username
+  }
+  threadId
+  createdAt
+}

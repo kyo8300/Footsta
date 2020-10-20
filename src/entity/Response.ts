@@ -4,8 +4,10 @@ import {
   Entity,
   CreateDateColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
+  Tree,
+  TreeChildren,
+  TreeParent,
 } from 'typeorm'
 import { ObjectType, Field, ID, Int } from 'type-graphql'
 import { Length } from 'class-validator'
@@ -14,6 +16,7 @@ import { Thread } from './Thread'
 
 @ObjectType()
 @Entity()
+@Tree('closure-table')
 export class Response extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
@@ -24,10 +27,11 @@ export class Response extends BaseEntity {
   @Length(2, 1024)
   text: string
 
-  @ManyToOne(() => Response, (response) => response.childResponses)
+  @TreeParent()
   parentResponse: Response
 
-  @OneToMany(() => Response, (response) => response.parentResponse)
+  @Field(() => [Response])
+  @TreeChildren()
   childResponses: Response[]
 
   @Field(() => User, { nullable: true })
