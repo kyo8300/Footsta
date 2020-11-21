@@ -22,6 +22,7 @@ export class ResponseResolver {
     const responses = await responseRepository.find({
       relations: ['parentResponse', 'childResponses'],
       where: { threadId, parentResponse: IsNull() },
+      order: { createdAt: 'ASC' },
     })
     const responsesTree = responses.map(async (res) => {
       if (res.childResponses.length) {

@@ -10,26 +10,26 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
-    "graphql": "^15.3.0",
-    "next": "latest",
+    "graphql": "^15.4.0",
+    "next": "10.0.1",
     "next-with-apollo": "^5.1.0",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
-    "react-hook-form": "^6.8.3",
-    "styled-components": "^5.0.0"
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-hook-form": "^6.11.1",
+    "styled-components": "^5.2.1"
   },
   "devDependencies": {
-    "@apollo/client": "^3.2.0",
-    "@graphql-codegen/cli": "1.17.8",
-    "@graphql-codegen/typescript": "1.17.8",
-    "@graphql-codegen/typescript-operations": "1.17.8",
-    "@graphql-codegen/typescript-react-apollo": "1.17.8",
-    "@types/node": "12.0.12",
-    "@types/react": "16.8.23",
-    "@types/react-dom": "16.8.4",
-    "@types/styled-components": "5.0.1",
+    "@apollo/client": "^3.2.5",
+    "@graphql-codegen/cli": "1.19.1",
+    "@graphql-codegen/typescript": "1.17.11",
+    "@graphql-codegen/typescript-operations": "^1.17.9",
+    "@graphql-codegen/typescript-react-apollo": "^2.1.1",
+    "@types/node": "14.14.7",
+    "@types/react": "16.9.56",
+    "@types/react-dom": "16.9.9",
+    "@types/styled-components": "5.1.4",
     "babel-plugin-styled-components": "^1.10.0",
-    "typescript": "4.0"
+    "typescript": "4.0.5"
   },
   "license": "MIT"
 }

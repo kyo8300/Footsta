@@ -17,8 +17,8 @@ import ResponseForm from '../../components/response/ResponseForm'
 const Thread: React.FC = () => {
   const fineTuneIdx = 2
   const router = useRouter()
-  const { id } = router.query
-  const threadId = typeof id === 'string' ? parseInt(id) : -1
+  const { id: paramsId } = router.query
+  const threadId = typeof paramsId === 'string' ? parseInt(paramsId) : -1
   const { data: threadData } = useGetThreadQuery({
     variables: { threadId },
   })
