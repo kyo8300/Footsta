@@ -21,6 +21,9 @@ const Response: React.FC<ResponseProps> = ({
   currentUser,
   level,
 }) => {
+  const responseId =
+    typeof response.id === 'string' ? parseInt(response.id) : -1
+
   return (
     <>
       <ReplyDisplay level={level}>
@@ -31,7 +34,7 @@ const Response: React.FC<ResponseProps> = ({
         <Box ml={1} mt={1} mb={3}>
           <Box>{response.text}</Box>
           <Box mt={1} color={grey[500]}>
-            <Reply username={currentUser} />
+            <Reply username={currentUser} responseId={responseId} />
           </Box>
         </Box>
         {response.childResponses &&
@@ -58,7 +61,7 @@ const ReplyDisplay = styled(Box)<{ level: number }>`
   /* padding-left: ${({ level }) =>
     level === 1 ? level * 10 : level * 3}px; */
   padding-right: ${({ level }) => (level === 1 ? level * 10 : level * 3)}px;
-  border-left: ${({ level }) => (level > 0 ? '1px solid grey' : '')};
+  border-left: ${({ level }) => (level > 0 ? '1px solid silver' : '')};
 `
 
 export default Response

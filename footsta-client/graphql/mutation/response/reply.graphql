@@ -1,0 +1,7 @@
+mutation Reply($responseId: Int!, $text: String!) {
+  reply(responseId: $responseId, text: $text) {
+    id
+    text
+    createdAt
+  }
+}

@@ -197,6 +197,20 @@ export type CreateResponseMutation = (
   )> }
 );
 
+export type ReplyMutationVariables = Exact<{
+  responseId: Scalars['Int'];
+  text: Scalars['String'];
+}>;
+
+
+export type ReplyMutation = (
+  { __typename?: 'Mutation' }
+  & { reply: (
+    { __typename?: 'Response' }
+    & Pick<Response, 'id' | 'text' | 'createdAt'>
+  ) }
+);
+
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -437,6 +451,41 @@ export function useCreateResponseMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateResponseMutationHookResult = ReturnType<typeof useCreateResponseMutation>;
 export type CreateResponseMutationResult = Apollo.MutationResult<CreateResponseMutation>;
 export type CreateResponseMutationOptions = Apollo.BaseMutationOptions<CreateResponseMutation, CreateResponseMutationVariables>;
+export const ReplyDocument = gql`
+    mutation Reply($responseId: Int!, $text: String!) {
+  reply(responseId: $responseId, text: $text) {
+    id
+    text
+    createdAt
+  }
+}
+    `;
+export type ReplyMutationFn = Apollo.MutationFunction<ReplyMutation, ReplyMutationVariables>;
+
+/**
+ * __useReplyMutation__
+ *
+ * To run a mutation, you first call `useReplyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReplyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [replyMutation, { data, loading, error }] = useReplyMutation({
+ *   variables: {
+ *      responseId: // value for 'responseId'
+ *      text: // value for 'text'
+ *   },
+ * });
+ */
+export function useReplyMutation(baseOptions?: Apollo.MutationHookOptions<ReplyMutation, ReplyMutationVariables>) {
+        return Apollo.useMutation<ReplyMutation, ReplyMutationVariables>(ReplyDocument, baseOptions);
+      }
+export type ReplyMutationHookResult = ReturnType<typeof useReplyMutation>;
+export type ReplyMutationResult = Apollo.MutationResult<ReplyMutation>;
+export type ReplyMutationOptions = Apollo.BaseMutationOptions<ReplyMutation, ReplyMutationVariables>;
 export const CurrentUserDocument = gql`
     query currentUser {
   currentUser {
@@ -508,7 +557,7 @@ export const GetResponsesDocument = gql`
  *   },
  * });
  */
-export function useGetResponsesQuery(baseOptions?: Apollo.QueryHookOptions<GetResponsesQuery, GetResponsesQueryVariables>) {
+export function useGetResponsesQuery(baseOptions: Apollo.QueryHookOptions<GetResponsesQuery, GetResponsesQueryVariables>) {
         return Apollo.useQuery<GetResponsesQuery, GetResponsesQueryVariables>(GetResponsesDocument, baseOptions);
       }
 export function useGetResponsesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetResponsesQuery, GetResponsesQueryVariables>) {
@@ -548,7 +597,7 @@ export const GetThreadDocument = gql`
  *   },
  * });
  */
-export function useGetThreadQuery(baseOptions?: Apollo.QueryHookOptions<GetThreadQuery, GetThreadQueryVariables>) {
+export function useGetThreadQuery(baseOptions: Apollo.QueryHookOptions<GetThreadQuery, GetThreadQueryVariables>) {
         return Apollo.useQuery<GetThreadQuery, GetThreadQueryVariables>(GetThreadDocument, baseOptions);
       }
 export function useGetThreadLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThreadQuery, GetThreadQueryVariables>) {
