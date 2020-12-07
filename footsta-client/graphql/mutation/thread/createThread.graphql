@@ -1,0 +1,9 @@
+mutation CreateThread($title: String!, $text: String!) {
+  createThread(data: { title: $title, text: $text }) {
+    id
+    title
+    text
+    ownerId
+    createdAt
+  }
+}

@@ -211,6 +211,20 @@ export type ReplyMutation = (
   ) }
 );
 
+export type CreateThreadMutationVariables = Exact<{
+  title: Scalars['String'];
+  text: Scalars['String'];
+}>;
+
+
+export type CreateThreadMutation = (
+  { __typename?: 'Mutation' }
+  & { createThread?: Maybe<(
+    { __typename?: 'Thread' }
+    & Pick<Thread, 'id' | 'title' | 'text' | 'ownerId' | 'createdAt'>
+  )> }
+);
+
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -486,6 +500,43 @@ export function useReplyMutation(baseOptions?: Apollo.MutationHookOptions<ReplyM
 export type ReplyMutationHookResult = ReturnType<typeof useReplyMutation>;
 export type ReplyMutationResult = Apollo.MutationResult<ReplyMutation>;
 export type ReplyMutationOptions = Apollo.BaseMutationOptions<ReplyMutation, ReplyMutationVariables>;
+export const CreateThreadDocument = gql`
+    mutation CreateThread($title: String!, $text: String!) {
+  createThread(data: {title: $title, text: $text}) {
+    id
+    title
+    text
+    ownerId
+    createdAt
+  }
+}
+    `;
+export type CreateThreadMutationFn = Apollo.MutationFunction<CreateThreadMutation, CreateThreadMutationVariables>;
+
+/**
+ * __useCreateThreadMutation__
+ *
+ * To run a mutation, you first call `useCreateThreadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateThreadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createThreadMutation, { data, loading, error }] = useCreateThreadMutation({
+ *   variables: {
+ *      title: // value for 'title'
+ *      text: // value for 'text'
+ *   },
+ * });
+ */
+export function useCreateThreadMutation(baseOptions?: Apollo.MutationHookOptions<CreateThreadMutation, CreateThreadMutationVariables>) {
+        return Apollo.useMutation<CreateThreadMutation, CreateThreadMutationVariables>(CreateThreadDocument, baseOptions);
+      }
+export type CreateThreadMutationHookResult = ReturnType<typeof useCreateThreadMutation>;
+export type CreateThreadMutationResult = Apollo.MutationResult<CreateThreadMutation>;
+export type CreateThreadMutationOptions = Apollo.BaseMutationOptions<CreateThreadMutation, CreateThreadMutationVariables>;
 export const CurrentUserDocument = gql`
     query currentUser {
   currentUser {

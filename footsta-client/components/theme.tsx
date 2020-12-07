@@ -9,6 +9,17 @@ const theme = createMuiTheme({
       main: '#53D9EC',
     },
   },
+
+  overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        a: {
+          textDecoration: 'none',
+          color: '#53D9EC',
+        },
+      },
+    },
+  },
 })
 
 export default theme

@@ -10,10 +10,11 @@ import ScrollTop from './ScrollTop'
 
 const Layout: React.FC = ({ children }) => {
   const theme = useTheme()
+
   return (
     <DefaultLayout bgcolor={theme.palette.primary.main}>
       <Navbar />
-      <Toolbar id="back-to-top-anchor" />
+      <BackToTop id="back-to-top-anchor" />
       {children}
       <ScrollTop>
         <Fab color="secondary" size="small" aria-label="scroll back to top">
@@ -27,6 +28,10 @@ const Layout: React.FC = ({ children }) => {
 const DefaultLayout = styled(Box)`
   height: 100%;
   margin: 0;
+`
+
+const BackToTop = styled(Toolbar)`
+  min-height: 30px;
 `
 
 export default Layout

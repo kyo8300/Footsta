@@ -53,13 +53,8 @@ const Response: React.FC<ResponseProps> = ({
 }
 
 const ReplyDisplay = styled(Box)<{ level: number }>`
-  /* background-color: ${({ level }) =>
-    level > 0 ? (level % 2 === 0 ? 'white' : 'whitesmoke') : 'inherit'}; */
-
   padding-left: ${({ level }) => (level > 0 ? '10' : '0')}px;
 
-  /* padding-left: ${({ level }) =>
-    level === 1 ? level * 10 : level * 3}px; */
   padding-right: ${({ level }) => (level === 1 ? level * 10 : level * 3)}px;
   border-left: ${({ level }) => (level > 0 ? '1px solid silver' : '')};
 `
