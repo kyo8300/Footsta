@@ -18,9 +18,14 @@ type ResponseInputs = {
 type ResponseFormProps = {
   threadId: number
   username: string
+  lastCursor: string
 }
 
-const ResponseForm: React.FC<ResponseFormProps> = ({ threadId, username }) => {
+const ResponseForm: React.FC<ResponseFormProps> = ({
+  threadId,
+  username,
+  lastCursor,
+}) => {
   const [createResponse] = useCreateResponseMutation()
   const { register, handleSubmit, reset } = useForm<ResponseInputs>()
   const onSubmit: SubmitHandler<ResponseInputs> = async (data) => {
@@ -30,19 +35,12 @@ const ResponseForm: React.FC<ResponseFormProps> = ({ threadId, username }) => {
           text: data.text,
           threadId,
         },
-        update: (store, { data }) => {
-          store.modify({
-            fields: {
-              getResponses(existingResponses = []) {
-                const newResponse = store.writeQuery({
-                  query: GetResponsesDocument,
-                  data: data?.createResponse,
-                })
-                return [...existingResponses, newResponse]
-              },
-            },
-          })
-        },
+        refetchQueries: [
+          {
+            query: GetResponsesDocument,
+            variables: { threadId, cursor: lastCursor },
+          },
+        ],
       })
       reset({ text: '' })
     } catch (err) {

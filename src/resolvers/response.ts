@@ -8,22 +8,46 @@ import {
   Int,
   FieldResolver,
   Root,
+  ObjectType,
+  Field,
 } from 'type-graphql'
-import { getRepository, getTreeRepository, IsNull } from 'typeorm'
+import { getRepository, getTreeRepository, IsNull, MoreThan } from 'typeorm'
 import { Response } from '../entity/Response'
 import { User } from '../entity/User'
 import { gqlContext } from '../types'
 
+@ObjectType()
+class PaginatedResponses {
+  @Field(() => [Response])
+  responses: Response[]
+
+  @Field()
+  hasMore: boolean
+}
+
 @Resolver(() => Response)
 export class ResponseResolver {
-  @Query(() => [Response])
-  async getResponses(@Arg('threadId', () => Int) threadId: number) {
+  @Query(() => PaginatedResponses)
+  async getResponses(
+    @Arg('threadId', () => Int) threadId: number,
+    @Arg('cursor', () => String, { nullable: true }) cursor: string,
+    @Arg('limit', () => Int, { defaultValue: 5 }) limit: number
+  ) {
+    const cursorOption = cursor
+      ? { createdAt: MoreThan(new Date(parseInt(cursor) + 1)) }
+      : {}
     const responseRepository = getTreeRepository(Response)
     const responses = await responseRepository.find({
       relations: ['parentResponse', 'childResponses'],
-      where: { threadId, parentResponse: IsNull() },
+      where: {
+        threadId,
+        parentResponse: IsNull(),
+        ...cursorOption,
+      },
+      take: limit + 1,
       order: { createdAt: 'ASC' },
     })
+
     const responsesTree = responses.map(async (res) => {
       if (res.childResponses.length) {
         const childrenResponse = await responseRepository.findDescendantsTree(
@@ -34,7 +58,7 @@ export class ResponseResolver {
       }
       return res
     })
-    return responsesTree
+    return { responses: responsesTree, hasMore: responses.length > limit }
   }
 
   @Mutation(() => Response, { nullable: true })

@@ -9,7 +9,9 @@ import { useReplyMutation, GetResponsesDocument } from '../../generated/graphql'
 
 interface ReplyProps {
   responseId: number
+  threadId: number
   username: string
+  fetchNum: number
 }
 
 interface ReplyFormProps {
@@ -17,7 +19,12 @@ interface ReplyFormProps {
   text: string
 }
 
-const Reply: React.FC<ReplyProps> = ({ responseId, username }) => {
+const Reply: React.FC<ReplyProps> = ({
+  responseId,
+  username,
+  threadId,
+  fetchNum,
+}) => {
   const [isReply, setIsReply] = useState(false)
   const { register, handleSubmit, reset } = useForm<ReplyFormProps>()
   const [reply] = useReplyMutation()
@@ -28,19 +35,12 @@ const Reply: React.FC<ReplyProps> = ({ responseId, username }) => {
           text: data.text,
           responseId,
         },
-        update: (store, { data }) => {
-          store.modify({
-            fields: {
-              getResponses(existingResponses = []) {
-                const newResponse = store.writeQuery({
-                  query: GetResponsesDocument,
-                  data: data?.reply,
-                })
-                return [...existingResponses, newResponse]
-              },
-            },
-          })
-        },
+        refetchQueries: [
+          {
+            query: GetResponsesDocument,
+            variables: { threadId, limit: fetchNum * 6 },
+          },
+        ],
       })
       reset({ text: '' })
       setIsReply(false)
