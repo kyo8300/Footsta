@@ -1,7 +1,7 @@
-query GetResponses($threadId: Int!) {
-  getResponses(threadId: $threadId) {
-    ...ResponseInfo
-    childResponses {
+query GetResponses($threadId: Int!, $cursor: String, $limit: Int) {
+  getResponses(threadId: $threadId, cursor: $cursor, limit: $limit) {
+    hasMore
+    responses {
       ...ResponseInfo
       childResponses {
         ...ResponseInfo
@@ -11,6 +11,9 @@ query GetResponses($threadId: Int!) {
             ...ResponseInfo
             childResponses {
               ...ResponseInfo
+              childResponses {
+                ...ResponseInfo
+              }
             }
           }
         }

@@ -13,6 +13,7 @@ interface ResponseProps {
   idx: number
   currentUser: string
   level: number
+  fetchNum: number
 }
 
 const Response: React.FC<ResponseProps> = ({
@@ -20,6 +21,7 @@ const Response: React.FC<ResponseProps> = ({
   idx,
   currentUser,
   level,
+  fetchNum,
 }) => {
   const responseId =
     typeof response.id === 'string' ? parseInt(response.id) : -1
@@ -34,7 +36,12 @@ const Response: React.FC<ResponseProps> = ({
         <Box ml={1} mt={1} mb={3}>
           <Box>{response.text}</Box>
           <Box mt={1} color={grey[500]}>
-            <Reply username={currentUser} responseId={responseId} />
+            <Reply
+              username={currentUser}
+              responseId={responseId}
+              threadId={response.threadId}
+              fetchNum={fetchNum}
+            />
           </Box>
         </Box>
         {response.childResponses &&
@@ -45,6 +52,7 @@ const Response: React.FC<ResponseProps> = ({
               idx={++idx}
               currentUser={currentUser}
               level={childIdx === 0 ? ++level : level}
+              fetchNum={fetchNum}
             />
           ))}
       </ReplyDisplay>

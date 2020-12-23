@@ -28,18 +28,18 @@ const MainThread: React.FC = () => {
       <Divider />
       <Box>
         {data?.getThreads?.map((thread) => (
-          <Link href="/thread/[id]" as={`/thread/${thread.id}`} key={thread.id}>
-            <ThreadBox>
-              <TitleDisplay>
-                <Typography variant="body2">
-                  {thread.owner.username || 'Anonymous'}
-                </Typography>
-                <Typography variant="subtitle1" color="secondary">
-                  {thread.title}
-                </Typography>
-                <DateBox>{displayDate(thread.createdAt)}</DateBox>
-              </TitleDisplay>
-            </ThreadBox>
+          <Link href={`/thread/${thread.id}`} key={thread.id}>
+            <a>
+              <ThreadBox>
+                <TitleDisplay>
+                  <UserName variant="body2">
+                    {thread.owner.username || 'Anonymous'}
+                  </UserName>
+                  <Typography variant="subtitle1">{thread.title}</Typography>
+                  <DateBox>{displayDate(thread.createdAt)}</DateBox>
+                </TitleDisplay>
+              </ThreadBox>
+            </a>
           </Link>
         ))}
       </Box>
@@ -52,6 +52,10 @@ const ThreadBox = styled(Box)`
     background-color: rgba(220, 220, 220, 0.3);
     cursor: pointer;
   }
+`
+
+const UserName = styled(Typography)`
+  color: black;
 `
 
 const ThemeDisplay = styled(Typography)`
@@ -71,6 +75,7 @@ const ViewAll = styled(Box)`
   margin-right: 5px;
 `
 const DateBox = styled(Box)`
+  color: black;
   text-align: end;
   margin-top: 5px;
 `
